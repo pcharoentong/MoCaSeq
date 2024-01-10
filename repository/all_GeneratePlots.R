@@ -11,7 +11,7 @@
 suppressPackageStartupMessages(library(GenomicRanges))
 suppressPackageStartupMessages(library(devEMF))
 
-DefineChromSizes = function(GenomeVersion)
+DefineChromSizes = function(species)
 {
   if(species=="Human")
   {
