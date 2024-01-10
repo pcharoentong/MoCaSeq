@@ -11,14 +11,18 @@
 args = commandArgs(TRUE)
 
 name=args[1] #used for naming in- and output files
-genome_fasta=args[2] #location of the reference genome fasta
-repository_dir=args[3] #location of repository
+inputfile_normal=args[2] 
+inputfile_tumor=args[3] 
+genome_fasta=args[4] #location of the reference genome fasta
+repository_dir=args[5] #location of repository
+outputfile_germline_variants=args[6] 
+outputfile_LOH_variants=args[7] 
 
 source(paste(repository_dir,"/LOH_Library.R",sep=""))
 
 #read input files
-tumor = read.table(paste(name,"/results/Mutect2/",name,".Tumor.Mutect2.Positions.txt", sep=""), header=T, sep="\t")
-normal = read.table(paste(name,"/results/Mutect2/",name,".Normal.Mutect2.Positions.txt", sep=""), header=T, sep="\t")
+tumor = read.table(inputfile_tumor, header=T, sep="\t")
+normal = read.table(inputfile_normal, header=T, sep="\t")
 
 #adjust column names
 colnames(tumor) = c("Chrom", "Pos", "Ref", "Alt", "Frequency", "RefCount", "AltCount", "MapQ", "BaseQ")
@@ -32,7 +36,7 @@ normal=LOH_FilterReads(normal)
 variants = LOH_MergeVariants(tumor,normal)
 
 #write out table used for plotting of germline variants
-write.table(variants,file=paste(name,"/results/LOH/",name,".VariantsForLOHGermline.txt",sep=""),quote=F,sep="\t",row.names=F,col.names=T)
+write.table(variants,file=outputfile_germline_variants,quote=F,sep="\t",row.names=F,col.names=T)
 
 #filter for informative variants (heterozygous in germline)
 variants = variants[variants[,"Normal_Freq"] <= 0.7 & variants[,"Normal_Freq"] >= 0.3,]
@@ -66,4 +70,4 @@ amb = LOH_AssignAlleles(amb,import,dict_unamb)
 #merge the final tables and export it for plotting
 final_variants = rbind(amb,unamb,indel)
 
-write.table(final_variants,file=paste(name,"/results/LOH/",name,".VariantsForLOH.txt",sep=""),quote=F,sep="\t",row.names=F,col.names=T)
+write.table(final_variants,file=outputfile_LOH_variants,quote=F,sep="\t",row.names=F,col.names=T)
