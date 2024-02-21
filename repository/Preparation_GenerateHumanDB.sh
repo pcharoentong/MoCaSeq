@@ -32,6 +32,9 @@ mv "ref/"$VersionHuman"/00-All_nochr.vcf" "ref/"$VersionHuman"/00-all.vcf"
 bgzip "ref/"$VersionHuman"/00-all.vcf"
 tabix -p vcf "ref/"$VersionHuman"/00-all.vcf.gz"
 
+# Exclusion file for delly
+wget -nv -P "ref/"$VersionHuman"/" https://raw.githubusercontent.com/dellytools/delly/main/excludeTemplates/human.hg38.excl.tsv
+
 wget -nv -P "ref/"$VersionHuman"/" ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
 wget -nv -P "ref/"$VersionHuman"/" ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.genomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz.tbi
 wget -nv -P "ref/"$VersionHuman"/" ftp://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_genotype/gnomad.exomes.r2.0.1.sites.GRCh38.noVEP.vcf.gz
